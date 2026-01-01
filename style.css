@@ -41,12 +41,14 @@ section {
 
 .js section {
     opacity: 0;
+    visibility: hidden;
     transform: translateY(20px);
-    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out, visibility 0.6s;
 }
 
 .js section.visible {
     opacity: 1;
+    visibility: visible;
     transform: translateY(0);
 }
 
@@ -55,7 +57,7 @@ footer {
     padding: 2rem 0;
     background: #fff;
     border-top: 1px solid #eee;
-    color: #888;
+    color: #595959;
 }
 
 /* Back to Top Button */
