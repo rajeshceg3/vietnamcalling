@@ -20,6 +20,24 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(section);
     });
 
+    // Reading Time Calculation
+    const mainContent = document.querySelector('main');
+    if (mainContent) {
+        const text = mainContent.innerText;
+        const wordCount = text.trim().split(/\s+/).length;
+        const readingTime = Math.ceil(wordCount / 200);
+
+        const readingTimeElement = document.createElement('p');
+        readingTimeElement.id = 'reading-time';
+        readingTimeElement.textContent = `${readingTime} min read`;
+        readingTimeElement.setAttribute('aria-label', `Estimated reading time: ${readingTime} minutes`);
+
+        const header = document.querySelector('header');
+        if (header) {
+            header.appendChild(readingTimeElement);
+        }
+    }
+
     // Back to Top functionality
     const backToTopButton = document.getElementById('back-to-top');
 
