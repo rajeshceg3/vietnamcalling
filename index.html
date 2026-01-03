@@ -3,30 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vietnam: A Travelogue</title>
+    <meta name="description" content="An immersive travelogue exploring the ethereal beauty of Vietnam, from Ha Long Bay to Sapa.">
+    <title>Vietnam: Ethereal Journey</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Proza+Libre:wght@400;500;600&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>Vietnam: A Travelogue</h1>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="#" class="logo">Vietnam</a>
+            <button class="mobile-menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+                <svg class="icon-menu" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+                <svg class="icon-close" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <ul class="nav-links">
+                <li><a href="#ha-long-bay">Ha Long Bay</a></li>
+                <li><a href="#hoi-an">Hoi An</a></li>
+                <li><a href="#sapa">Sapa</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header id="hero">
+        <div class="hero-content">
+            <h1>A Symphony of <br>Stone &amp; Water</h1>
+            <p class="subtitle">Discover the timeless spirit of Vietnam</p>
+            <a href="#main-content" class="scroll-indicator" aria-label="Scroll down">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+            </a>
+        </div>
+        <div class="hero-overlay"></div>
     </header>
-    <main>
-        <section id="ha-long-bay">
-            <h2>Ha Long Bay: A Symphony of Stone and Water</h2>
-            <p>The dawn in Ha Long Bay is a whispered secret. The sun, a shy painter, first touches the tips of the limestone karsts, those ancient sentinels rising from the emerald waters. It is a place where time, like the gentle tide, seems to ebb and flow with a quiet grace. The air, thick with the scent of salt and ancient stone, fills your lungs, and for a moment, the world outside this ethereal bay ceases to exist. Each ripple on the water tells a story, each shadow in the caves holds a mystery. To be here is to be a part of a living poem, a symphony of stone and water that has been playing for millennia.</p>
-        </section>
-        <section id="hoi-an">
-            <h2>Hoi An: The Gentle Glow of a Bygone Era</h2>
-            <p>Hoi An is a memory, a dream of a time when the world moved at the pace of a meandering river. As dusk descends, the ancient town awakens in a soft, incandescent glow. Hundreds of silk lanterns, each a tiny sun, cast a warm, gentle light on the weathered wooden facades of the merchant houses. The air is a tapestry of scents – the subtle fragrance of frangipani, the rich aroma of street food, the faint, sweet smell of incense from a hidden temple. Walking through these narrow, cobbled streets is like stepping into a painting, a timeless masterpiece where every corner turned reveals a new, enchanting vista.</p>
-        </section>
-        <section id="sapa">
-            <h2>Sapa: The Whispering Terraces of the Tonkinese Alps</h2>
-            <p>In the highlands of Sapa, the world is a canvas of green. The terraced rice fields, carved into the mountainsides like a giant’s staircase, cascade down to the valleys below. The mist, a constant, ethereal presence, rolls in and out, veiling and unveiling the landscape in a slow, hypnotic dance. The air here is crisp, clean, and carries with it the scent of the earth, of growing things, of life itself. It is a place of profound tranquility, where the silence is broken only by the whisper of the wind through the rice stalks and the distant call of a bird. To stand here is to feel small, yet connected to something vast and eternal.</p>
-        </section>
+
+    <main id="main-content">
+        <article id="ha-long-bay" class="destination">
+            <div class="content-wrapper">
+                <div class="text-content">
+                    <span class="chapter-number">01</span>
+                    <h2>Ha Long Bay</h2>
+                    <h3>A Whisper of Eternity</h3>
+                    <p>The dawn in Ha Long Bay is a whispered secret. The sun, a shy painter, first touches the tips of the limestone karsts, those ancient sentinels rising from the emerald waters. It is a place where time, like the gentle tide, seems to ebb and flow with a quiet grace.</p>
+                    <p>The air, thick with the scent of salt and ancient stone, fills your lungs, and for a moment, the world outside this ethereal bay ceases to exist. To be here is to be a part of a living poem, a symphony of stone and water that has been playing for millennia.</p>
+                </div>
+                <figure class="visual-content">
+                    <img src="https://images.unsplash.com/photo-1674397636313-35c1b73ed699?auto=format&fit=crop&w=1600&q=80" alt="Limestone karsts rising from the misty waters of Ha Long Bay" loading="lazy">
+                    <figcaption>The ancient limestone sentinels of Ha Long Bay.</figcaption>
+                </figure>
+            </div>
+        </article>
+
+        <article id="hoi-an" class="destination alt-layout">
+            <div class="content-wrapper">
+                <div class="text-content">
+                    <span class="chapter-number">02</span>
+                    <h2>Hoi An</h2>
+                    <h3>The Glow of Memory</h3>
+                    <p>Hoi An is a memory, a dream of a time when the world moved at the pace of a meandering river. As dusk descends, the ancient town awakens in a soft, incandescent glow. Hundreds of silk lanterns, each a tiny sun, cast a warm, gentle light on the weathered wooden facades.</p>
+                    <p>The air is a tapestry of scents – the subtle fragrance of frangipani, the rich aroma of street food, the faint, sweet smell of incense. Walking these streets is like stepping into a painting, a timeless masterpiece where every corner reveals a new enchantment.</p>
+                </div>
+                <figure class="visual-content">
+                    <img src="https://images.unsplash.com/photo-1560113855-2ea616c915ee?auto=format&fit=crop&w=1600&q=80" alt="Glowing silk lanterns hanging in the streets of Hoi An at dusk" loading="lazy">
+                    <figcaption>Silk lanterns illuminating the ancient streets.</figcaption>
+                </figure>
+            </div>
+        </article>
+
+        <article id="sapa" class="destination">
+            <div class="content-wrapper">
+                <div class="text-content">
+                    <span class="chapter-number">03</span>
+                    <h2>Sapa</h2>
+                    <h3>Stairway to the Clouds</h3>
+                    <p>In the highlands of Sapa, the world is a canvas of green. The terraced rice fields, carved into the mountainsides like a giant’s staircase, cascade down to the valleys below. The mist, a constant, ethereal presence, rolls in and out, veiling and unveiling the landscape in a slow, hypnotic dance.</p>
+                    <p>It is a place of profound tranquility, where the silence is broken only by the whisper of the wind through the rice stalks. To stand here is to feel small, yet connected to something vast and eternal.</p>
+                </div>
+                <figure class="visual-content">
+                    <img src="https://images.unsplash.com/photo-1758003293450-b9478f02bf48?auto=format&fit=crop&w=1600&q=80" alt="Golden rice terraces carved into the misty mountains of Sapa" loading="lazy">
+                    <figcaption>Rice terraces cascading down the Tonkinese Alps.</figcaption>
+                </figure>
+            </div>
+        </article>
     </main>
+
     <footer>
-        <p>&copy; 2025 Jonny Ive</p>
+        <div class="footer-content">
+            <p class="copyright">&copy; 2025 Vietnam Travelogue</p>
+            <p class="designer">Designed with &hearts; by Jules</p>
+        </div>
     </footer>
+
+    <script>
+        // Progressive enhancement: add js class
+        document.documentElement.classList.add('js');
+        // Fallback for script failure
+        setTimeout(function() {
+            document.documentElement.classList.remove('js');
+        }, 5000);
+    </script>
     <script src="script.js"></script>
 </body>
 </html>
