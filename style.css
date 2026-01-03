@@ -46,9 +46,41 @@ main {
 }
 
 section {
-    margin-bottom: 4rem;
+    margin-bottom: 6rem;
     opacity: 1;
     transform: none;
+    position: relative;
+}
+
+/* Visual Travelogue Elements */
+section::before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 300px;
+    margin-bottom: 2rem;
+    border-radius: 4px;
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+#ha-long-bay::before {
+    /* Teal/Green Gradient for Water and Stone */
+    background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%);
+    background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23e0f2f1;stop-opacity:1" /><stop offset="100%" style="stop-color:%234db6ac;stop-opacity:1" /></linearGradient></defs><rect width="100%" height="100%" fill="url(%23g)" /><path d="M0 300 L50 250 L100 300 Z" fill="rgba(255,255,255,0.3)"/></svg>');
+}
+
+#hoi-an::before {
+    /* Warm/Gold Gradient for Lanterns */
+    background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+    background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23fff8e1;stop-opacity:1" /><stop offset="100%" style="stop-color:%23ffd54f;stop-opacity:1" /></linearGradient></defs><rect width="100%" height="100%" fill="url(%23g)" /><circle cx="50%" cy="50%" r="50" fill="rgba(255,255,255,0.4)"/></svg>');
+}
+
+#sapa::before {
+    /* Green/Mist Gradient for Rice Fields */
+    background: linear-gradient(135deg, #f1f8e9 0%, #dcedc8 100%);
+    background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23f1f8e9;stop-opacity:1" /><stop offset="100%" style="stop-color:%23aed581;stop-opacity:1" /></linearGradient></defs><rect width="100%" height="100%" fill="url(%23g)" /><path d="M0 200 Q 400 250 800 200 T 1600 200" stroke="rgba(255,255,255,0.4)" fill="none" stroke-width="20" /></svg>');
 }
 
 .js section {
@@ -85,12 +117,14 @@ footer {
     z-index: 1000;
     border-radius: 0 0 4px 4px;
     transform: translateY(-100%);
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, opacity 0.3s ease;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    opacity: 0;
 }
 
 .skip-link:focus {
     transform: translateY(0);
+    opacity: 1;
     outline: 2px solid #fff;
     outline-offset: -2px;
 }
@@ -154,5 +188,45 @@ html {
 
     .back-to-top {
         transition: none;
+    }
+}
+
+/* Mobile Optimizations */
+@media (max-width: 600px) {
+    main {
+        padding: 1rem;
+    }
+
+    header {
+        padding: 1.5rem 0;
+    }
+
+    h1 {
+        font-size: 1.75rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    p {
+        font-size: 1.05rem; /* Slightly larger text for mobile readability */
+        line-height: 1.6;
+    }
+
+    section {
+        margin-bottom: 4rem;
+    }
+
+    section::before {
+        height: 200px; /* Smaller visuals on mobile */
+    }
+
+    .back-to-top {
+        width: 3.5rem; /* Larger touch target */
+        height: 3.5rem;
+        bottom: 1.5rem;
+        right: 1.5rem;
     }
 }

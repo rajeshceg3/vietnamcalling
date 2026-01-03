@@ -23,7 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Reading Time Calculation
     const mainContent = document.querySelector('main');
     if (mainContent) {
-        const text = mainContent.innerText;
+        // Use textContent to avoid reflow (layout thrashing)
+        const text = mainContent.textContent;
         const wordCount = text.trim().split(/\s+/).length;
         const readingTime = Math.ceil(wordCount / 200);
 
