@@ -72,6 +72,29 @@ footer {
     color: #595959;
 }
 
+/* Skip Link */
+.skip-link {
+    position: fixed;
+    top: 0;
+    left: 1rem;
+    padding: 0.75rem 1.25rem;
+    background: #2a2a2a;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    z-index: 1000;
+    border-radius: 0 0 4px 4px;
+    transform: translateY(-100%);
+    transition: transform 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.skip-link:focus {
+    transform: translateY(0);
+    outline: 2px solid #fff;
+    outline-offset: -2px;
+}
+
 /* Back to Top Button */
 .back-to-top {
     position: fixed;
