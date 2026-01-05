@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    document.body.classList.add('js-loaded');
     const sections = document.querySelectorAll('section');
 
     const observerOptions = {
@@ -41,14 +42,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Back to Top functionality
     const backToTopButton = document.getElementById('back-to-top');
+    let isScrolling = false;
 
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 300) {
-            backToTopButton.classList.add('visible');
-        } else {
-            backToTopButton.classList.remove('visible');
+        if (!isScrolling) {
+            window.requestAnimationFrame(() => {
+                if (window.scrollY > 300) {
+                    backToTopButton.classList.add('visible');
+                    // Accessibility: Ensure it's reachable when visible
+                    backToTopButton.setAttribute('aria-hidden', 'false');
+                    backToTopButton.setAttribute('tabindex', '0');
+                } else {
+                    backToTopButton.classList.remove('visible');
+                    // Accessibility: Remove from tab order when hidden
+                    backToTopButton.setAttribute('aria-hidden', 'true');
+                    backToTopButton.setAttribute('tabindex', '-1');
+                }
+                isScrolling = false;
+            });
+            isScrolling = true;
         }
     });
+
+    // Initial state for accessibility
+    backToTopButton.setAttribute('aria-hidden', 'true');
+    backToTopButton.setAttribute('tabindex', '-1');
 
     backToTopButton.addEventListener('click', () => {
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

@@ -30,37 +30,52 @@ body {
     left: 0;
     background: var(--bg-color);
     color: var(--text-color);
-    padding: 8px;
+    padding: 1rem;
     z-index: 100;
     transform: translateY(-100%);
     opacity: 0;
-    transition: transform 0.3s, opacity 0.3s;
+    visibility: hidden;
+    transition: transform 0.3s, opacity 0.3s, visibility 0.3s;
+    font-weight: 600;
 }
 
 .skip-link:focus {
     transform: translateY(0);
     opacity: 1;
+    visibility: visible;
 }
 
 header {
-    padding: calc(var(--spacing-unit) * 4) var(--spacing-unit);
+    padding: calc(var(--spacing-unit) * 6) var(--spacing-unit);
     text-align: center;
     opacity: 0;
     animation: fadeIn 1.2s var(--transition-ease) forwards;
 }
 
 h1 {
-    font-size: clamp(2rem, 5vw, 4rem);
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
     font-weight: 300;
     margin: 0;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
+    color: #1a1a1a;
+    text-wrap: balance;
+}
+
+header p {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #666;
+    margin-top: calc(var(--spacing-unit) / 2);
+    font-family: var(--font-primary);
+    font-style: italic;
 }
 
 h2 {
-    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
     font-weight: 300;
     margin-bottom: var(--spacing-unit);
-    color: #555;
+    color: #333; /* Improved contrast from #555 */
+    text-wrap: balance;
 }
 
 section {
@@ -105,6 +120,9 @@ section.visible {
 p {
     margin-bottom: var(--spacing-unit);
     text-align: justify;
+    hyphens: auto;
+    line-height: 1.8;
+    color: #444; /* Soften slightly for reading comfort but keep contrast high */
 }
 
 footer {
@@ -120,19 +138,22 @@ footer {
     position: fixed;
     bottom: 2rem;
     right: 2rem;
-    background: var(--bg-color);
-    border: 1px solid var(--accent-color);
+    background: rgba(253, 253, 253, 0.9);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     border-radius: 50%;
-    width: 3rem;
-    height: 3rem;
+    width: 3.5rem;
+    height: 3.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     opacity: 0;
-    transition: opacity 0.3s var(--transition-ease), visibility 0.3s;
+    transition: opacity 0.4s var(--transition-ease), visibility 0.4s, transform 0.2s;
     visibility: hidden;
     color: var(--text-color);
+    z-index: 50;
 }
 
 .back-to-top.visible {
