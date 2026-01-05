@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Intersection Observer for Reveal Animations
+    // Target text content separately to allow staggering of children
     const revealElements = document.querySelectorAll('.text-content, .visual-content');
 
     // Add reveal class initially
@@ -8,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const observerOptions = {
         root: null,
         rootMargin: '0px',
-        threshold: 0.15 // Trigger when 15% visible
+        threshold: 0.1 // Trigger slightly earlier for smoother feel
     };
 
     const observer = new IntersectionObserver((entries, observer) => {
@@ -47,13 +48,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 3. Navbar background on scroll
     const nav = document.querySelector('.main-nav');
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
+
+    // Throttled scroll handler for performance
+    let lastKnownScrollPosition = 0;
+    let ticking = false;
+
+    function updateNav(scrollPos) {
+        if (scrollPos > 50) {
             nav.style.boxShadow = '0 10px 30px rgba(0,0,0,0.05)';
-            nav.style.background = 'rgba(249, 247, 242, 0.95)';
+            nav.style.background = 'rgba(248, 245, 241, 0.85)'; // Slightly more opaque
         } else {
             nav.style.boxShadow = 'none';
-            nav.style.background = 'rgba(249, 247, 242, 0.85)'; // Matches CSS
+            nav.style.background = 'rgba(248, 245, 241, 0.7)'; // Matches CSS initial state
+        }
+    }
+
+    window.addEventListener('scroll', () => {
+        lastKnownScrollPosition = window.scrollY;
+
+        if (!ticking) {
+            window.requestAnimationFrame(() => {
+                updateNav(lastKnownScrollPosition);
+                ticking = false;
+            });
+
+            ticking = true;
         }
     });
 
