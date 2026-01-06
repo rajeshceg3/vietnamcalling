@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-LNy00vtrQrVxznh1yX0Y0CYDorhFmgpHHtsKylI+y+k='; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-rypP3hE1o0RkSp6xR8lgBgr+u6pOSb5v+D1Wt4WRWlI='; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:;">
     <meta name="theme-color" content="#fdfdfd">
     <title>Vietnam: A Travelogue</title>
     <meta name="description" content="A visual travelogue of Vietnam's most enchanting landscapes: Ha Long Bay, Hoi An, and Sapa.">
@@ -16,13 +16,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&display=swap" rel="stylesheet">
     <script>
         document.documentElement.classList.add('js');
-        // Fail-safe: If content isn't visible within 400ms (e.g., script error), show it.
-        // This is much faster than 2s to avoid user frustration.
+        // Fail-safe: If content isn't visible within 3000ms (e.g., script error), show it.
+        // This ensures users on slow connections don't see a blank screen forever,
+        // while allowing enough time for the script to load on 3G networks.
         setTimeout(() => {
             if (!document.body.classList.contains('js-loaded')) {
                 document.documentElement.classList.remove('js');
             }
-        }, 400);
+        }, 3000);
     </script>
     <link rel="stylesheet" href="style.css">
 </head>
