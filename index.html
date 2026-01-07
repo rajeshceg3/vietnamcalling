@@ -3,47 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-rypP3hE1o0RkSp6xR8lgBgr+u6pOSb5v+D1Wt4WRWlI='; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:;">
-    <meta name="theme-color" content="#fdfdfd">
-    <title>Vietnam: A Travelogue</title>
-    <meta name="description" content="A visual travelogue of Vietnam's most enchanting landscapes: Ha Long Bay, Hoi An, and Sapa.">
-    <meta property="og:title" content="Vietnam: A Travelogue">
-    <meta property="og:description" content="Journey through the limestone karsts of Ha Long Bay, the lantern-lit streets of Hoi An, and the misty terraces of Sapa.">
+    <meta name="description" content="A curated journey through the landscapes and soul of Vietnam, from the misty mountains of the North to the turquoise waters of the South.">
+    <meta property="og:title" content="Vietnam: A Journey Through Time">
+    <meta property="og:description" content="A curated journey through the landscapes and soul of Vietnam.">
     <meta property="og:type" content="website">
+    <meta name="theme-color" content="#ffffff">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-iFlI7FctZOeCzezRlYvuyoG4dSVJzt8JdipYreNucTM=' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self';">
+    <title>Vietnam: A Journey Through Time</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🇻🇳</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <script>
+        // Progressive Enhancement Fail-safe:
+        // If JS fails to load/run, this timeout removes the 'js' class from documentElement
+        // to ensure content remains visible.
         document.documentElement.classList.add('js');
-        // Fail-safe: If content isn't visible within 3000ms (e.g., script error), show it.
-        // This ensures users on slow connections don't see a blank screen forever,
-        // while allowing enough time for the script to load on 3G networks.
-        setTimeout(() => {
+        setTimeout(function() {
             if (!document.body.classList.contains('js-loaded')) {
                 document.documentElement.classList.remove('js');
             }
         }, 3000);
     </script>
-    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
     <header>
-        <h1>Vietnam: A Travelogue</h1>
+        <h1>Vietnam</h1>
+        <p>A Chronicle of Mist, Water, and Stone</p>
     </header>
     <main id="main-content">
-        <section id="ha-long-bay">
-            <h2>Ha Long Bay: A Symphony of Stone and Water</h2>
-            <p>The dawn in Ha Long Bay is a whispered secret. The sun, a shy painter, first touches the tips of the limestone karsts, those ancient sentinels rising from the emerald waters. It is a place where time, like the gentle tide, seems to ebb and flow with a quiet grace. The air, thick with the scent of salt and ancient stone, fills your lungs, and for a moment, the world outside this ethereal bay ceases to exist. Each ripple on the water tells a story, each shadow in the caves holds a mystery. To be here is to be a part of a living poem, a symphony of stone and water that has been playing for millennia.</p>
-        </section>
-        <section id="hoi-an">
-            <h2>Hoi An: The Gentle Glow of a Bygone Era</h2>
-            <p>Hoi An is a memory, a dream of a time when the world moved at the pace of a meandering river. As dusk descends, the ancient town awakens in a soft, incandescent glow. Hundreds of silk lanterns, each a tiny sun, cast a warm, gentle light on the weathered wooden facades of the merchant houses. The air is a tapestry of scents – the subtle fragrance of frangipani, the rich aroma of street food, the faint, sweet smell of incense from a hidden temple. Walking through these narrow, cobbled streets is like stepping into a painting, a timeless masterpiece where every corner turned reveals a new, enchanting vista.</p>
+        <section id="ha-giang">
+            <h2>Ha Giang: The Edge of the Sky</h2>
+            <p>Here, the earth rises to meet the heavens in a symphony of limestone karsts. It is a place of raw, untamed beauty, where the roads carve through the mountains like ribbons of grey silk. The air is crisp, the silence profound, broken only by the whisper of the wind through the valleys. To journey here is to touch the very soul of the land, rugged and eternal.</p>
         </section>
         <section id="sapa">
-            <h2>Sapa: The Whispering Terraces of the Tonkinese Alps</h2>
-            <p>In the highlands of Sapa, the world is a canvas of green. The terraced rice fields, carved into the mountainsides like a giant’s staircase, cascade down to the valleys below. The mist, a constant, ethereal presence, rolls in and out, veiling and unveiling the landscape in a slow, hypnotic dance. The air here is crisp, clean, and carries with it the scent of the earth, of growing things, of life itself. It is a place of profound tranquility, where the silence is broken only by the whisper of the wind through the rice stalks and the distant call of a bird. To stand here is to feel small, yet connected to something vast and eternal.</p>
+            <h2>Sapa: The Cloud Kingdom</h2>
+            <p>High in the Hoang Lien Son mountains, Sapa is a sanctuary of mist and memory. The terraced rice fields cascade down the slopes like steps for giants, green in the summer, gold in the harvest. It is a place where the earth touches the sky, where the air is crisp and carries the scent of pine and woodsmoke. To walk here is to wander through a dream, timeless and serene.</p>
+        </section>
+        <section id="hanoi">
+            <h2>Hanoi: The City of Lakes</h2>
+            <p>Hanoi is a city of poetry written in chaos. The streets hum with the rhythm of life, a ceaseless flow of motorbikes and memories. Yet, amidst the noise, there is a profound stillness to be found by the lakes. The Old Quarter, with its narrow shophouses and tangled wires, tells a thousand stories of resilience and grace. It is a place where the past and present dance in a delicate embrace.</p>
+        </section>
+        <section id="ha-long-bay">
+            <h2>Ha Long Bay: Dragons Descending</h2>
+            <p>A seascape of myth and majesty. Thousands of limestone pillars rise from the emerald waters, silent sentinels of a bygone era. The bay is a canvas of shifting moods, from the ethereal glow of sunrise to the moody mists of twilight. It is nature sculpted with a divine hand, a place where one feels small, humble, and infinitely connected to the world.</p>
+        </section>
+        <section id="ninh-binh">
+            <h2>Ninh Binh: The Inland Sea</h2>
+            <p>Often called 'Ha Long Bay on land,' Ninh Binh is a masterpiece of karst topography. The rivers wind lazily through green paddies and towering cliffs, carrying boats rowed by feet. It is a landscape of tranquility, where the only sound is the dip of the oar and the call of a distant bird. Here, the world feels ancient, untouched, and utterly peaceful.</p>
+        </section>
+        <section id="hue">
+            <h2>Hue: The Imperial Soul</h2>
+            <p>Hue is the guardian of Vietnam's imperial past. The Citadel stands as a testament to a time of emperors and poets, its walls weathering the passage of centuries. The Perfume River flows languidly through the city, reflecting the pagodas and the sorrowful beauty of the royal tombs. It is a city of quiet dignity, where history is not just remembered, but felt.</p>
+        </section>
+        <section id="da-nang">
+            <h2>Da Nang: The Bridge of Light</h2>
+            <p>Da Nang is the pulse of modern Vietnam, vibrant and forward-looking. Yet, it retains a deep connection to nature, with the Marble Mountains watching over the city and the Han River cutting through its heart. The Dragon Bridge breathes fire into the night sky, a symbol of a nation rising. It is a city of contrasts, where neon lights meet the gentle crash of the ocean waves.</p>
+        </section>
+        <section id="hoi-an">
+            <h2>Hoi An: The Lantern City</h2>
+            <p>Hoi An is a whisper from the past. The yellow-walled shophouses and the lantern-lit streets transport you to a time when this was a bustling trading port. But now, it is a place of quiet reflection. The river glides gently by, mirroring the glow of a thousand silk lanterns. It is a place to lose oneself in the labyrinth of time, to find beauty in the details of a fading facade.</p>
+        </section>
+        <section id="da-lat">
+            <h2>Da Lat: The City of Eternal Spring</h2>
+            <p>Nestled in the central highlands, Da Lat is a breath of cool air. French colonial villas peek out from the pine forests, and the mist rolls over the lakes in the morning light. It is a place of romance and nostalgia, where the flowers bloom year-round and the pace of life slows to a gentle stroll. A sanctuary for the weary soul.</p>
+        </section>
+        <section id="ho-chi-minh-city">
+            <h2>Ho Chi Minh City: A Fever Dream of Light</h2>
+            <p>Saigon is not a city; it is an engine. A fever dream of light, motion, and unyielding energy. The heat rises from the asphalt, mingling with the aroma of street food and the exhaust of a million dreams. It is a collision of worlds—the Notre Dame Cathedral standing stoic amidst glass skyscrapers, the war remnants echoing in the museums while the youth dance in rooftop bars. To be here is to be swept up in a torrent of life, raw, unfiltered, and exhilarating.</p>
+        </section>
+        <section id="phu-quoc">
+            <h2>Phu Quoc: Where the Ocean Kisses the Sky</h2>
+            <p>At the edge of the map, Phu Quoc lies like an emerald teardrop in the turquoise sea. It is the end of the world, in the best possible way. The sun sets here with a dramatic flair, painting the horizon in bruised purples and fiery oranges. The sand is soft as powdered sugar, and the water, clear as gin, invites you to wash away the dust of the mainland. It is a sanctuary of salt and sun, where the only obligation is to watch the tide come in.</p>
         </section>
     </main>
     <footer>
