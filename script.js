@@ -46,8 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 3. Navbar background on scroll
+    // 3. Navbar background on scroll & Parallax
     const nav = document.querySelector('.main-nav');
+    const visualContents = document.querySelectorAll('.visual-content img');
 
     // Throttled scroll handler for performance
     let lastKnownScrollPosition = 0;
@@ -56,10 +57,29 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateNav(scrollPos) {
         if (scrollPos > 50) {
             nav.style.boxShadow = '0 10px 30px rgba(0,0,0,0.05)';
-            nav.style.background = 'rgba(248, 245, 241, 0.85)'; // Slightly more opaque
+            nav.style.background = 'rgba(248, 245, 241, 0.85)';
         } else {
             nav.style.boxShadow = 'none';
-            nav.style.background = 'rgba(248, 245, 241, 0.7)'; // Matches CSS initial state
+            nav.style.background = 'rgba(248, 245, 241, 0.6)';
+        }
+    }
+
+    function updateParallax(scrollPos) {
+        // Check reduced motion inside the loop or use the global one if available
+        const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        // Only run on desktop and if reduced motion is false
+        if (window.innerWidth >= 1024 && !isReducedMotion) {
+            visualContents.forEach(img => {
+                const rect = img.parentElement.getBoundingClientRect();
+                // Check if image is in viewport
+                if (rect.top < window.innerHeight && rect.bottom > 0) {
+                    // Calculate relative position
+                    const speed = 0.05; // Subtle speed
+                    const offset = (window.innerHeight - rect.top) * speed;
+                    img.style.transform = `scale(1.1) translateY(${offset}px)`;
+                }
+            });
         }
     }
 
@@ -69,6 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!ticking) {
             window.requestAnimationFrame(() => {
                 updateNav(lastKnownScrollPosition);
+                updateParallax(lastKnownScrollPosition);
                 ticking = false;
             });
 
@@ -88,6 +109,16 @@ document.addEventListener('DOMContentLoaded', () => {
         menuToggle.setAttribute('aria-expanded', !isExpanded);
 
         navLinks.classList.toggle('active');
+
+        // Prevent background scroll
+        if (!isExpanded) {
+            body.style.overflow = 'hidden';
+            // body.style.touchAction = 'none'; // Removed: this prevents menu scrolling too
+        } else {
+            body.style.overflow = '';
+            // body.style.touchAction = '';
+        }
+
         body.classList.toggle('nav-open');
 
         // Toggle Icons
@@ -103,7 +134,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function closeMobileMenu() {
         menuToggle.setAttribute('aria-expanded', 'false');
         navLinks.classList.remove('active');
+
+        body.style.overflow = '';
+        // body.style.touchAction = '';
         body.classList.remove('nav-open');
+
         iconMenu.style.display = 'block';
         iconClose.style.display = 'none';
     }

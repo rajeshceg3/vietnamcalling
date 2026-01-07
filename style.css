@@ -30,11 +30,11 @@
     --transition-medium: 0.6s var(--ease-out-expo);
     --transition-fast: 0.3s var(--ease-out-expo);
 
-    /* Shadows */
-    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
-    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
-    --shadow-card: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+    /* Shadows - Colored & Deep (Stripe-like) */
+    --shadow-sm: 0 2px 4px 0 rgba(10, 50, 52, 0.02), 0 1px 2px 0 rgba(10, 50, 52, 0.01);
+    --shadow-md: 0 12px 24px -6px rgba(10, 50, 52, 0.08), 0 4px 8px -4px rgba(10, 50, 52, 0.04);
+    --shadow-lg: 0 20px 30px -10px rgba(10, 50, 52, 0.1), 0 8px 12px -6px rgba(10, 50, 52, 0.05);
+    --shadow-card: 0 30px 60px -12px rgba(10, 50, 52, 0.15), 0 18px 36px -18px rgba(10, 50, 52, 0.1);
 }
 
 /* Reset & Base */
@@ -53,10 +53,11 @@ html {
 
 body {
     background-color: var(--color-bg);
-    /* Ultra-subtle mesh gradient for depth */
+    /* Ultra-subtle mesh gradient + Noise Texture for "Paper" feel */
     background-image:
-        radial-gradient(at 100% 0%, rgba(184, 150, 94, 0.08) 0px, transparent 50%),
-        radial-gradient(at 0% 100%, rgba(10, 50, 52, 0.05) 0px, transparent 50%);
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E"),
+        radial-gradient(at 100% 0%, rgba(184, 150, 94, 0.12) 0px, transparent 60%),
+        radial-gradient(at 0% 100%, rgba(10, 50, 52, 0.08) 0px, transparent 60%);
     background-attachment: fixed;
     color: var(--color-text);
     font-family: var(--font-body);
@@ -116,6 +117,7 @@ h2 {
     font-size: var(--type-scale-xl);
     margin-bottom: var(--space-sm);
     letter-spacing: -0.02em;
+    text-wrap: balance;
 }
 
 h3 {
@@ -142,11 +144,11 @@ p {
     width: 100%;
     padding: var(--space-sm) var(--space-md);
     z-index: 100;
-    background: rgba(248, 245, 241, 0.7); /* More transparency */
-    backdrop-filter: blur(20px) saturate(180%); /* Premium glass effect */
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.4s var(--ease-out-expo);
+    background: rgba(248, 245, 241, 0.6); /* High transparency for glass */
+    backdrop-filter: blur(16px) saturate(200%); /* Strong blur, high saturation */
+    -webkit-backdrop-filter: blur(16px) saturate(200%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Softer border */
+    transition: all 0.5s var(--ease-out-expo);
 }
 
 .nav-container {
@@ -260,12 +262,14 @@ p {
     overflow: hidden;
 }
 
-/* Enhanced Overlay */
+/* Enhanced Overlay with Grain */
 #hero::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, rgba(10, 50, 52, 0.4) 0%, rgba(10, 50, 52, 0.2) 50%, rgba(10, 50, 52, 0.5) 100%);
+    background:
+        linear-gradient(to bottom, rgba(10, 50, 52, 0.3) 0%, rgba(10, 50, 52, 0.1) 50%, rgba(10, 50, 52, 0.4) 100%),
+        radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.3) 100%);
     z-index: 0;
 }
 
@@ -273,17 +277,18 @@ p {
     position: relative;
     z-index: 1;
     max-width: 900px;
-    transform: translateY(30px);
-    opacity: 0;
-    animation: fadeUp 1.6s var(--ease-out-expo) forwards;
-    animation-delay: 0.2s;
 }
 
+/* Staggered Hero Animation */
 .hero-content h1 {
     color: var(--color-white);
     margin-bottom: var(--space-sm);
     text-shadow: 0 10px 30px rgba(0,0,0,0.2);
     line-height: 1.05;
+    transform: translateY(40px);
+    opacity: 0;
+    animation: fadeUp 1.4s var(--ease-out-expo) forwards;
+    animation-delay: 0.3s;
 }
 
 .subtitle {
@@ -293,6 +298,10 @@ p {
     margin-bottom: var(--space-lg);
     font-weight: 300;
     letter-spacing: 0.02em;
+    transform: translateY(30px);
+    opacity: 0;
+    animation: fadeUp 1.4s var(--ease-out-expo) forwards;
+    animation-delay: 0.5s; /* Staggered */
 }
 
 .scroll-indicator {
@@ -301,13 +310,15 @@ p {
     display: inline-flex;
     flex-direction: column;
     align-items: center;
-    opacity: 0.8;
+    opacity: 0; /* Start hidden */
     text-decoration: none;
     font-size: 0.8rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     gap: 0.5rem;
     margin-top: var(--space-md);
+    animation: fadeUp 1s var(--ease-out-expo) forwards, bounce 2.5s infinite;
+    animation-delay: 1s, 1s; /* Wait for text, then bounce */
 }
 
 /* Main Content */
@@ -338,6 +349,29 @@ main {
     margin-bottom: -1.5rem;
     font-weight: 300;
     opacity: 0.6;
+}
+
+/* Sticky Chapter Number on Desktop */
+@media (min-width: 1024px) {
+    .text-content {
+        position: relative;
+    }
+
+    .chapter-number {
+        position: sticky;
+        top: 6rem;
+        z-index: 10;
+        margin-bottom: 2rem;
+        text-align: right;
+        transform: translateX(-4rem);
+        width: 100px;
+        float: left; /* Pull out of flow slightly */
+    }
+
+    /* Adjust text padding since we pulled the number out */
+    .text-content p, .text-content h2, .text-content h3 {
+        padding-left: 0;
+    }
 }
 
 .visual-content {
