@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     backToTopButton.classList.add('visible');
                     // Accessibility: Ensure it's reachable when visible
                     backToTopButton.setAttribute('aria-hidden', 'false');
-                    backToTopButton.setAttribute('tabindex', '0');
+                    backToTopButton.removeAttribute('tabindex'); // Allow natural focus
                 } else {
                     backToTopButton.classList.remove('visible');
                     // Accessibility: Remove from tab order when hidden
@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             isScrolling = true;
         }
-    });
+    }, { passive: true });
 
     // Initial state for accessibility
     backToTopButton.setAttribute('aria-hidden', 'true');
@@ -73,6 +73,20 @@ document.addEventListener('DOMContentLoaded', () => {
         window.scrollTo({
             top: 0,
             behavior: prefersReducedMotion ? 'auto' : 'smooth'
+        });
+    });
+
+    // Parallax Effect
+    document.addEventListener('mousemove', (e) => {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        requestAnimationFrame(() => {
+             // Subtle global parallax based on screen center
+             const x = (e.clientX - window.innerWidth / 2) / 100; // Small movement
+             const y = (e.clientY - window.innerHeight / 2) / 100;
+
+             document.body.style.setProperty('--mouse-x', `${x}px`);
+             document.body.style.setProperty('--mouse-y', `${y}px`);
         });
     });
 });
