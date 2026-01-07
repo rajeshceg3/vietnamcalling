@@ -5,66 +5,56 @@
 **Assessor:** Task Force Veteran QA Engineer (Jules)
 
 ## Executive Summary
-The application demonstrates a solid foundation with adherence to modern web standards (CSP, semantic HTML). However, critical vulnerabilities in UX reliability (progressive enhancement race conditions), performance optimization (unthrottled scroll listeners), and subtle accessibility gaps exist. The following report details 9 key findings categorized by severity.
+The application demonstrates a solid foundation with adherence to modern web standards (CSP, semantic HTML). However, critical vulnerabilities in UX reliability (progressive enhancement race conditions), performance optimization (unthrottled scroll listeners), and missing high-fidelity desktop interactions exist. This report details key findings to be addressed immediately.
 
 ---
 
 ## 1. Architectural Vulnerabilities
 **Severity:** **Medium**
-- **Finding:** Content Security Policy (CSP) is present but relies on a hardcoded hash for the inline script. If the inline script is modified without updating the hash, the site will break.
+- **Finding:** Content Security Policy (CSP) relies on a hardcoded hash for the inline script. The current hash may be desynchronized with the content, posing a breakage risk.
 - **Impact:** High fragility. Any change to the inline logic requires manual hash re-calculation.
-- **Recommendation:** Maintain strict CSP but consider moving complex logic to `script.js` or automating hash generation in the build pipeline. For now, ensure the hash is perfectly synchronized.
+- **Recommendation:** Maintain strict CSP and synchronize the hash.
 
-## 2. Sections Not Loading (Potential)
+## 2. Sections Not Loading (Progressive Enhancement)
 **Severity:** **High**
-- **Finding:** The progressive enhancement logic (`.js` class) relies on a `setTimeout` of 2000ms as a fallback. If the JS main thread is blocked or `IntersectionObserver` fails to fire within 2s (e.g., on a very slow low-end device), the content will remain hidden (`opacity: 0`) until the timeout forces the class removal.
-- **Impact:** Users on slow devices may see a blank screen for 2 full seconds or longer if the script fails entirely before the timeout runs.
-- **Recommendation:** Refactor the visibility logic. Instead of a blanket `opacity: 0` on `section`, use a specific class added by JS only when the observer is ready, or use CSS that defaults to visible and only hides *if* JS runs.
+- **Finding:** The progressive enhancement logic (`.js` class) relies on a 3000ms `setTimeout` fallback. If `script.js` fails or is delayed, users face a 3s blank screen.
+- **Impact:** Significant delay in First Meaningful Paint for users with flaky connections.
+- **Recommendation:** Retain the fail-safe but optimize script loading strategy where possible.
 
 ## 3. Accessibility Issues
 **Severity:** **Medium**
-- **Finding:** `header` element has `opacity: 0` and `animation: fadeIn`. If animations fail or are overridden, it might remain invisible.
-- **Finding:** Contrast on `h2` (#555 on #fdfdfd) is passable (7.5:1), but thin font weights on mobile might be hard to read.
-- **Finding:** "Skip to main content" link uses `transform` and `opacity`. When hidden, it must be `visibility: hidden` or `display: none` to avoid being focusable (ghost focus), though the current CSS `translateY(-100%)` might move it off-screen, `opacity: 0` alone doesn't remove it from the accessibility tree.
-- **Recommendation:** Ensure `visibility: hidden` is toggled for the skip link. Verify font weights for legibility.
+- **Finding:** "Skip to main content" link uses `opacity: 0` but potentially remains in the accessibility tree depending on `visibility` toggle implementation. (Verified: `visibility: hidden` is currently used, which is correct, but requires verification of toggle logic).
+- **Finding:** `back-to-top` button manually manages `tabindex="0"`, which is redundant for `<button>` elements and can lead to state mismatches.
+- **Recommendation:** Simplify focus management logic.
 
-## 4. User Experience Issues
-**Severity:** **Low**
-- **Finding:** The "Back to top" button appears abruptly.
-- **Recommendation:** Add a smooth transition for visibility.
-- **Finding:** "Jonny Ive" factor: Typography is good but spacing could be more "breathable" on larger screens.
+## 4. User Experience Issues (Desktop Enhancements)
+**Severity:** **Medium**
+- **Finding:** Missing "Gold Standard" desktop interactions:
+    -   No chapter numbers for sections (requested enhancement).
+    -   No mouse-driven parallax effects for immersive depth (requested enhancement).
+- **Impact:** The site feels "flat" and lacks the premium polish expected of the "Jonny Ive" persona.
+- **Recommendation:** Implement CSS counters for chapters and mouse-driven parallax on section backgrounds.
 
 ## 5. Basic Bugs and Issues
 **Severity:** **Low**
-- **Finding:** No explicit `lang` attribute on the `html` tag is present (checked: it is `en`, good).
-- **Finding:** `script.js` uses `innerHTML` or `textContent`? It uses `textContent` (Good).
+- **Finding:** CSS specificity race condition between `.js section` (opacity: 0) and `section.visible` (opacity: 1). Currently works due to source order, but fragile.
+- **Recommendation:** Ensure robust specificity or layer management.
 
-## 6. Potential Security Breaches
-**Severity:** **Low**
-- **Finding:** No obvious XSS vectors as `textContent` is used.
-- **Finding:** External links (none currently) would need `rel="noopener noreferrer"`.
-
-## 7. Performance Degradation Points
+## 6. Performance Degradation Points
 **Severity:** **High**
-- **Finding:** `window.addEventListener('scroll', ...)` in `script.js` fires on every pixel scrolled. This causes layout thrashing and high main-thread usage on mobile.
-- **Finding:** `IntersectionObserver` is good, but `unobserve` logic is correct.
-- **Recommendation:** Debounce or throttle the scroll event listener using `requestAnimationFrame`.
+- **Finding:** `window.addEventListener('scroll', ...)` in `script.js` is not marked as `passive: true`.
+- **Impact:** Potential scrolling performance degradation on mobile devices.
+- **Recommendation:** Add `{ passive: true }` to the event listener options.
 
-## 8. Edge Case Failure Scenarios
+## 7. Edge Case Failure Scenarios
 **Severity:** **Medium**
-- **Finding:** If JavaScript is disabled, the `.js` class is never added (good), so content is visible. However, if JS is *enabled* but `script.js` fails to load (network error), the inline script adds `.js` (hiding content) and the `setTimeout` eventually reveals it. This 2s delay is a failure state.
-- **Recommendation:** See finding #2.
-
-## 9. Subtle User Experience Disruption Vectors
-**Severity:** **Low**
-- **Finding:** The reading time calculation uses a fixed 200 wpm. This is arbitrary.
-- **Finding:** The smooth scroll behavior relies on `behavior: 'smooth'` which is good, but should strictly adhere to `prefers-reduced-motion`. (Already implemented, but needs verification).
+- **Finding:** Inline script whitespace sensitivity for CSP hashing.
+- **Recommendation:** Use a script to generate the hash to ensure exact matching.
 
 ---
 
 ## Action Plan
-1.  **Fix Security/Arch**: Verify CSP hash logic.
-2.  **Fix Performance**: Throttle scroll event.
-3.  **Fix Logic/Reliability**: Remove the 2s timeout hack and implement a robust "JS Loaded" state.
-4.  **Fix Accessibility**: Fix "Ghost Focus" on skip link and ensure high contrast.
-5.  **Polishing**: Enhance visuals.
+1.  **Architecture:** Fix CSP hash synchronization.
+2.  **Performance:** Optimize scroll listener.
+3.  **UX/UI:** Implement Chapter Numbers (CSS Counters) and Parallax (JS/CSS).
+4.  **Accessibility:** Clean up `back-to-top` focus logic.

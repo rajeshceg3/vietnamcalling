@@ -77,6 +77,24 @@ h2 {
     margin-bottom: var(--spacing-unit);
     color: #333; /* Improved contrast from #555 */
     text-wrap: balance;
+    display: flex;
+    align-items: baseline;
+}
+
+main {
+    counter-reset: chapter;
+}
+
+h2::before {
+    counter-increment: chapter;
+    content: counter(chapter, decimal-leading-zero) ". ";
+    font-family: var(--font-primary);
+    font-size: 0.6em;
+    color: var(--gold-accent);
+    margin-right: 1rem;
+    font-weight: 400;
+    opacity: 0.8;
+    transform: translateY(-2px);
 }
 
 section {
@@ -84,6 +102,8 @@ section {
     max-width: 850px;
     margin: 0 auto;
     transition: opacity var(--transition-speed) var(--transition-ease), transform var(--transition-speed) var(--transition-ease);
+    --mouse-x: 0px;
+    --mouse-y: 0px;
 }
 
 section::before {
@@ -94,6 +114,9 @@ section::before {
     border-radius: 4px;
     margin-bottom: calc(var(--spacing-unit) * 1.5);
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.01);
+    transform: translate3d(var(--mouse-x), var(--mouse-y), 0);
+    transition: transform 0.1s ease-out;
+    will-change: transform;
 }
 
 #hanoi::before {
