@@ -5,56 +5,43 @@
 **Assessor:** Task Force Veteran QA Engineer (Jules)
 
 ## Executive Summary
-The application demonstrates a solid foundation with adherence to modern web standards (CSP, semantic HTML). However, critical vulnerabilities in UX reliability (progressive enhancement race conditions), performance optimization (unthrottled scroll listeners), and missing high-fidelity desktop interactions exist. This report details key findings to be addressed immediately.
+Following a forensic code analysis and simulated "black box" validation, several discrepancies were identified between the intended "Gold Standard" design and the actual implementation. While the application maintains a strong security posture (CSP, semantic HTML), a critical visual defect renders the advertised parallax effect non-functional.
 
 ---
 
-## 1. Architectural Vulnerabilities
-**Severity:** **Medium**
-- **Finding:** Content Security Policy (CSP) relies on a hardcoded hash for the inline script. The current hash may be desynchronized with the content, posing a breakage risk.
-- **Impact:** High fragility. Any change to the inline logic requires manual hash re-calculation.
-- **Recommendation:** Maintain strict CSP and synchronize the hash.
-
-## 2. Sections Not Loading (Progressive Enhancement)
+## 1. Functional Defects (Critical)
 **Severity:** **High**
-- **Finding:** The progressive enhancement logic (`.js` class) relies on a 3000ms `setTimeout` fallback. If `script.js` fails or is delayed, users face a 3s blank screen.
-- **Impact:** Significant delay in First Meaningful Paint for users with flaky connections.
-- **Recommendation:** Retain the fail-safe but optimize script loading strategy where possible.
+- **Finding:** **Parallax System Failure**. The JavaScript correctly calculates and updates `--mouse-x` and `--mouse-y` on `document.body`. However, the `section` CSS rule explicitly defines `--mouse-x: 0px; --mouse-y: 0px;`. Due to CSS specificity and scoping, these local definitions override the inherited values from `body`, rendering the parallax effect completely inert.
+- **Impact:** The "immersive depth" and "premium feel" requested by the client are absent.
+- **Recommendation:** Remove the local variable resets in the `section` selector to allow inheritance from `body`.
 
-## 3. Accessibility Issues
-**Severity:** **Medium**
-- **Finding:** "Skip to main content" link uses `opacity: 0` but potentially remains in the accessibility tree depending on `visibility` toggle implementation. (Verified: `visibility: hidden` is currently used, which is correct, but requires verification of toggle logic).
-- **Finding:** `back-to-top` button manually manages `tabindex="0"`, which is redundant for `<button>` elements and can lead to state mismatches.
-- **Recommendation:** Simplify focus management logic.
-
-## 4. User Experience Issues (Desktop Enhancements)
-**Severity:** **Medium**
-- **Finding:** Missing "Gold Standard" desktop interactions:
-    -   No chapter numbers for sections (requested enhancement).
-    -   No mouse-driven parallax effects for immersive depth (requested enhancement).
-- **Impact:** The site feels "flat" and lacks the premium polish expected of the "Jonny Ive" persona.
-- **Recommendation:** Implement CSS counters for chapters and mouse-driven parallax on section backgrounds.
-
-## 5. Basic Bugs and Issues
+## 2. Security Hygiene
 **Severity:** **Low**
-- **Finding:** CSS specificity race condition between `.js section` (opacity: 0) and `section.visible` (opacity: 1). Currently works due to source order, but fragile.
-- **Recommendation:** Ensure robust specificity or layer management.
+- **Finding:** **Stale CSP Hash**. The Content Security Policy header includes `sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=`, which does not correspond to any currently present inline script.
+- **Impact:** Unnecessary clutter in security headers; potentially allows an unknown script if it were injected.
+- **Recommendation:** Remove the unused hash to maintain a strict "deny by default" posture.
 
-## 6. Performance Degradation Points
-**Severity:** **High**
-- **Finding:** `window.addEventListener('scroll', ...)` in `script.js` is not marked as `passive: true`.
-- **Impact:** Potential scrolling performance degradation on mobile devices.
-- **Recommendation:** Add `{ passive: true }` to the event listener options.
-
-## 7. Edge Case Failure Scenarios
+## 3. User Experience & Performance
 **Severity:** **Medium**
-- **Finding:** Inline script whitespace sensitivity for CSP hashing.
-- **Recommendation:** Use a script to generate the hash to ensure exact matching.
+- **Finding:** **Excessive Failsafe Latency**. The progressive enhancement failsafe waits 3000ms (3 seconds) before revealing content if JavaScript fails. In a "flaky network" scenario where the script hangs, the user faces a blank screen for 3 seconds.
+- **Impact:** Poor Perceived Performance.
+- **Recommendation:** Reduce the timeout to 1000ms-1500ms to balance script loading time against user waiting tolerance.
+
+## 4. Visual Polish (Verification)
+**Severity:** **Info**
+- **Finding:** **Chapter Numbers Verified**. Contrary to previous intelligence, CSS counters (`counter-increment: chapter`) are correctly implemented in `style.css`.
+- **Finding:** **Passive Listeners Verified**. The scroll listener in `script.js` correctly utilizes `{ passive: true }`.
+
+## 5. Architectural Observations
+**Severity:** **Low**
+- **Finding:** **Script Placement**. `script.js` is loaded at the end of `body`. While acceptable, moving to `<head>` with `defer` attribute allows for parallel downloading while parsing HTML, slightly improving TTI (Time to Interactive).
+- **Recommendation:** Relocate script tag to `head` with `defer`.
 
 ---
 
 ## Action Plan
-1.  **Architecture:** Fix CSP hash synchronization.
-2.  **Performance:** Optimize scroll listener.
-3.  **UX/UI:** Implement Chapter Numbers (CSS Counters) and Parallax (JS/CSS).
-4.  **Accessibility:** Clean up `back-to-top` focus logic.
+1.  **Fix Parallax:** Modify `style.css` to remove variable shadowing.
+2.  **Tighten Security:** Remove unused CSP hash in `index.html`.
+3.  **Optimize UX:** Reduce fail-safe timeout to 1500ms in `index.html`.
+4.  **Modernize Loading:** Move `script.js` to `head` with `defer`.
+5.  **Verify:** Conduct visual verification of parallax and graceful degradation.

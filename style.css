@@ -102,8 +102,6 @@ section {
     max-width: 850px;
     margin: 0 auto;
     transition: opacity var(--transition-speed) var(--transition-ease), transform var(--transition-speed) var(--transition-ease);
-    --mouse-x: 0px;
-    --mouse-y: 0px;
 }
 
 section::before {
