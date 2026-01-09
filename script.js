@@ -1,24 +1,34 @@
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Intersection Observer for Reveal Animations
-    const revealElements = document.querySelectorAll('.text-content, .visual-content');
-    revealElements.forEach(el => el.classList.add('reveal'));
+
+    // Text Content: Fade Up
+    const textElements = document.querySelectorAll('.text-content');
+    textElements.forEach(el => el.classList.add('reveal'));
+
+    // Visual Content: Clip Path Reveal
+    const visualElements = document.querySelectorAll('.visual-content');
 
     const observerOptions = {
         root: null,
-        rootMargin: '0px',
+        rootMargin: '-50px', // Trigger slightly before it enters fully
         threshold: 0.1
     };
 
     const observer = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('active');
+                if (entry.target.classList.contains('visual-content')) {
+                    entry.target.classList.add('reveal-active');
+                } else {
+                    entry.target.classList.add('active');
+                }
                 observer.unobserve(entry.target);
             }
         });
     }, observerOptions);
 
-    revealElements.forEach(el => observer.observe(el));
+    textElements.forEach(el => observer.observe(el));
+    visualElements.forEach(el => observer.observe(el));
 
     // Cache Reduced Motion Preference
     const reduceMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -48,17 +58,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 3. Scroll Logic (Nav Background & Parallax)
     const nav = document.querySelector('.main-nav');
-    const visualContents = document.querySelectorAll('.visual-content img');
+    const visualImages = document.querySelectorAll('.visual-content img');
     let lastKnownScrollPosition = 0;
     let scrollTicking = false;
 
     function updateNav(scrollPos) {
         if (scrollPos > 50) {
-            nav.style.boxShadow = '0 10px 30px rgba(0,0,0,0.05)';
-            nav.style.background = 'rgba(248, 245, 241, 0.85)';
+            nav.classList.add('scrolled');
         } else {
-            nav.style.boxShadow = 'none';
-            nav.style.background = 'rgba(248, 245, 241, 0.6)';
+            nav.classList.remove('scrolled');
         }
     }
 
@@ -67,12 +75,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Desktop only parallax check (min-width: 1024px)
         if (window.innerWidth >= 1024) {
-            visualContents.forEach(img => {
+            visualImages.forEach(img => {
                 const rect = img.parentElement.getBoundingClientRect();
-                if (rect.top < window.innerHeight && rect.bottom > 0) {
-                    const speed = 0.05;
-                    const offset = (window.innerHeight - rect.top) * speed;
-                    img.style.transform = `scale(1.1) translateY(${offset}px)`;
+                const viewportHeight = window.innerHeight;
+
+                // Check if element is in viewport (with buffer)
+                if (rect.top < viewportHeight && rect.bottom > 0) {
+                    // Parallax factor
+                    const speed = 0.06; // Slower, more subtle
+                    // Calculate offset based on center of viewport
+                    const offset = (viewportHeight - rect.top) * speed;
+
+                    // Apply using translate3d for hardware acceleration
+                    // Maintain scale(1.15) which is the base scale for this effect
+                    img.style.transform = `scale(1.15) translate3d(0, ${offset}px, 0)`;
                 }
             });
         }
@@ -90,60 +106,64 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, { passive: true });
 
-    // 4. Mouse Tracking & Magnetic Buttons (Desktop Only)
-    // Check for fine pointer (mouse)
+    // 4. Mouse Tracking & Magnetic Buttons (Desktop Only) with LERP
     if (window.matchMedia('(pointer: fine)').matches) {
         const body = document.body;
-        let mouseTicking = false;
-        let currentMouseX = 0;
-        let currentMouseY = 0;
 
-        // Optimized Spotlight Effect
+        // Target values (where mouse is)
+        let targetX = window.innerWidth / 2;
+        let targetY = window.innerHeight / 2;
+
+        // Current values (where spotlight is)
+        let currentX = targetX;
+        let currentY = targetY;
+
+        // Linear Interpolation
+        const lerp = (start, end, factor) => start + (end - start) * factor;
+        const lerpFactor = 0.1; // Lower = smoother/slower trailing
+
         window.addEventListener('mousemove', (e) => {
-            currentMouseX = e.clientX;
-            currentMouseY = e.clientY;
-
-            if (!mouseTicking) {
-                requestAnimationFrame(() => {
-                    body.style.setProperty('--mouse-x', `${currentMouseX}px`);
-                    body.style.setProperty('--mouse-y', `${currentMouseY}px`);
-                    mouseTicking = false;
-                });
-                mouseTicking = true;
-            }
+            targetX = e.clientX;
+            targetY = e.clientY;
         }, { passive: true });
 
-        // Optimized Magnetic Buttons
+        function animateSpotlight() {
+            currentX = lerp(currentX, targetX, lerpFactor);
+            currentY = lerp(currentY, targetY, lerpFactor);
+
+            body.style.setProperty('--mouse-x', `${currentX}px`);
+            body.style.setProperty('--mouse-y', `${currentY}px`);
+
+            requestAnimationFrame(animateSpotlight);
+        }
+
+        if (!prefersReducedMotion) {
+            animateSpotlight();
+        }
+
+        // Magnetic Effect
         const magneticElements = document.querySelectorAll('.magnetic');
 
         magneticElements.forEach(el => {
             let rect = null;
 
-            // Cache rect on mouse enter to avoid layout thrashing during move
             el.addEventListener('mouseenter', () => {
                 rect = el.getBoundingClientRect();
-                el.style.transition = 'transform 0.1s ease-out';
+                el.style.transition = 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)';
             });
 
             el.addEventListener('mousemove', (e) => {
-                if (!rect) return; // Safety check
-
+                if (!rect) return;
                 const x = e.clientX - rect.left - rect.width / 2;
                 const y = e.clientY - rect.top - rect.height / 2;
-
-                // Strength of the pull
-                const strength = 15;
-
-                // Use rAF for smoother visual updates if needed,
-                // but direct transform is usually performant enough for simple translations
-                // provided we aren't reading layout (getBoundingClientRect) here.
+                const strength = 6; // More subtle
                 el.style.transform = `translate(${x / strength}px, ${y / strength}px)`;
             });
 
             el.addEventListener('mouseleave', () => {
-                el.style.transition = 'transform 0.5s cubic-bezier(0.2, 0, 0.2, 1)'; // Elastic snap back
+                el.style.transition = 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
                 el.style.transform = 'translate(0, 0)';
-                rect = null; // Clear cache
+                rect = null;
             });
         });
     }
