@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Parallax Effect
     document.addEventListener('mousemove', (e) => {
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || window.matchMedia('(hover: none)').matches) return;
 
         requestAnimationFrame(() => {
              // Subtle global parallax based on screen center
