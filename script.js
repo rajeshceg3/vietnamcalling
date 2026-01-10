@@ -2,6 +2,30 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.add('js-loaded');
     const sections = document.querySelectorAll('section');
 
+    // Navigation Toggle Logic
+    const navToggle = document.querySelector('.nav-toggle');
+    const navOverlay = document.querySelector('.nav-overlay');
+    const navLinks = document.querySelectorAll('.nav-list a');
+
+    if (navToggle) {
+        navToggle.addEventListener('click', () => {
+            const isExpanded = navToggle.getAttribute('aria-expanded') === 'true';
+
+            navToggle.setAttribute('aria-expanded', !isExpanded);
+            navOverlay.setAttribute('aria-hidden', isExpanded);
+            document.body.classList.toggle('nav-open');
+        });
+
+        // Close menu when a link is clicked
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                navToggle.setAttribute('aria-expanded', 'false');
+                navOverlay.setAttribute('aria-hidden', 'true');
+                document.body.classList.remove('nav-open');
+            });
+        });
+    }
+
     const observerOptions = {
         root: null,
         rootMargin: '0px',
@@ -76,17 +100,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Parallax Effect
-    document.addEventListener('mousemove', (e) => {
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || window.matchMedia('(hover: none)').matches) return;
+    // Parallax Effect - Optimized
+    // Only attach if hover is supported (Desktop)
+    if (window.matchMedia('(hover: hover)').matches) {
+        let isParallaxTicking = false;
 
-        requestAnimationFrame(() => {
-             // Subtle global parallax based on screen center
-             const x = (e.clientX - window.innerWidth / 2) / 100; // Small movement
-             const y = (e.clientY - window.innerHeight / 2) / 100;
+        document.addEventListener('mousemove', (e) => {
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-             document.body.style.setProperty('--mouse-x', `${x}px`);
-             document.body.style.setProperty('--mouse-y', `${y}px`);
+            if (!isParallaxTicking) {
+                window.requestAnimationFrame(() => {
+                    // Subtle global parallax based on screen center
+                    const x = (e.clientX - window.innerWidth / 2) / 100; // Small movement
+                    const y = (e.clientY - window.innerHeight / 2) / 100;
+
+                    document.body.style.setProperty('--mouse-x', `${x}px`);
+                    document.body.style.setProperty('--mouse-y', `${y}px`);
+
+                    isParallaxTicking = false;
+                });
+                isParallaxTicking = true;
+            }
         });
-    });
+    }
 });
