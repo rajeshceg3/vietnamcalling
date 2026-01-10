@@ -4,6 +4,7 @@
     --accent-color: #27ae60;
     --gold-accent: #d4af37;
     --font-primary: 'Cormorant Garamond', serif;
+    --font-body: 'Proza Libre', sans-serif;
     --spacing-unit: clamp(1.5rem, 4vw, 3rem);
     --transition-speed: 0.8s;
     --transition-ease: cubic-bezier(0.2, 0.0, 0.2, 1);
@@ -16,7 +17,9 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: var(--font-primary);
+    font-family: var(--font-body);
+    --mouse-x: 0px;
+    --mouse-y: 0px;
     background-color: var(--bg-color);
     color: var(--text-color);
     line-height: 1.7;

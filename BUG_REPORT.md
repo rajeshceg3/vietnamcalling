@@ -5,43 +5,36 @@
 **Assessor:** Task Force Veteran QA Engineer (Jules)
 
 ## Executive Summary
-Following a forensic code analysis and simulated "black box" validation, several discrepancies were identified between the intended "Gold Standard" design and the actual implementation. While the application maintains a strong security posture (CSP, semantic HTML), a critical visual defect renders the advertised parallax effect non-functional.
+A rigorous forensic analysis of the "Vietnam: A Journey Through Time" web application has revealed critical deviations from the "Gold Standard" design specification. While the application maintains a robust security posture, visual fidelity and typography standards have been compromised. Specifically, the parallax system suffers from initialization failures, and the typographical hierarchy is inconsistent with the design language.
 
 ---
 
-## 1. Functional Defects (Critical)
+## 1. Visual Integrity & Typography (Critical)
 **Severity:** **High**
-- **Finding:** **Parallax System Failure**. The JavaScript correctly calculates and updates `--mouse-x` and `--mouse-y` on `document.body`. However, the `section` CSS rule explicitly defines `--mouse-x: 0px; --mouse-y: 0px;`. Due to CSS specificity and scoping, these local definitions override the inherited values from `body`, rendering the parallax effect completely inert.
-- **Impact:** The "immersive depth" and "premium feel" requested by the client are absent.
-- **Recommendation:** Remove the local variable resets in the `section` selector to allow inheritance from `body`.
+- **Finding:** **Incorrect Typographical Hierarchy**. The design specification mandates 'Proza Libre' for body content to ensure readability and modern contrast against the classical 'Cormorant Garamond' headers. Current implementation forces 'Cormorant Garamond' globally, reducing legibility for long-form text.
+- **Impact:** Sub-optimal reading experience; failure to meet design aesthetic.
+- **Recommendation:** Integrate 'Proza Libre' via Google Fonts and apply it to the `body` selector.
 
-## 2. Security Hygiene
-**Severity:** **Low**
-- **Finding:** **Stale CSP Hash**. The Content Security Policy header includes `sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=`, which does not correspond to any currently present inline script.
-- **Impact:** Unnecessary clutter in security headers; potentially allows an unknown script if it were injected.
-- **Recommendation:** Remove the unused hash to maintain a strict "deny by default" posture.
-
-## 3. User Experience & Performance
+## 2. Functional Defects
 **Severity:** **Medium**
-- **Finding:** **Excessive Failsafe Latency**. The progressive enhancement failsafe waits 3000ms (3 seconds) before revealing content if JavaScript fails. In a "flaky network" scenario where the script hangs, the user faces a blank screen for 3 seconds.
-- **Impact:** Poor Perceived Performance.
-- **Recommendation:** Reduce the timeout to 1000ms-1500ms to balance script loading time against user waiting tolerance.
+- **Finding:** **Parallax Variable Initialization Failure**. The CSS variables `--mouse-x` and `--mouse-y` are used in `transform` properties but are not initialized in the CSS. This results in an `undefined` state until the first `mousemove` event fires, potentially causing layout shifts or invalid transforms on initial load.
+- **Impact:** potential "Flash of Unstyled Content" (FOUC) or visual glitching during page load.
+- **Recommendation:** Explicitly initialize `--mouse-x: 0px; --mouse-y: 0px;` in the `body` CSS rule.
 
-## 4. Visual Polish (Verification)
-**Severity:** **Info**
-- **Finding:** **Chapter Numbers Verified**. Contrary to previous intelligence, CSS counters (`counter-increment: chapter`) are correctly implemented in `style.css`.
-- **Finding:** **Passive Listeners Verified**. The scroll listener in `script.js` correctly utilizes `{ passive: true }`.
-
-## 5. Architectural Observations
+## 3. User Experience (Mobile/Performance)
 **Severity:** **Low**
-- **Finding:** **Script Placement**. `script.js` is loaded at the end of `body`. While acceptable, moving to `<head>` with `defer` attribute allows for parallel downloading while parsing HTML, slightly improving TTI (Time to Interactive).
-- **Recommendation:** Relocate script tag to `head` with `defer`.
+- **Finding:** **Unnecessary Main Thread Work on Mobile**. The parallax `mousemove` event listener remains active on touch devices (mobiles/tablets) where mouse movement is non-existent or emulated, wasting CPU cycles and battery.
+- **Impact:** Reduced battery life on mobile devices; unnecessary processing.
+- **Recommendation:** Implement a `window.matchMedia('(hover: none)')` check to disable the parallax logic on touch-first devices.
+
+## 4. Security Hygiene
+**Severity:** **Info**
+- **Finding:** **CSP Hash Verification**. The Content Security Policy hash for the inline script was verified and found to be **CORRECT** (`lUS0XXLnmKLj61hxLV1qajwf02yMDTwf6M56S3J+Rdk=`). No action required.
 
 ---
 
 ## Action Plan
-1.  **Fix Parallax:** Modify `style.css` to remove variable shadowing.
-2.  **Tighten Security:** Remove unused CSP hash in `index.html`.
-3.  **Optimize UX:** Reduce fail-safe timeout to 1500ms in `index.html`.
-4.  **Modernize Loading:** Move `script.js` to `head` with `defer`.
-5.  **Verify:** Conduct visual verification of parallax and graceful degradation.
+1.  **Typography:** Import 'Proza Libre' and update `font-family` assignments.
+2.  **Stability:** Initialize CSS variables for the parallax system.
+3.  **Optimization:** Guard parallax logic against touch devices.
+4.  **Verify:** Confirm fixes via automated inspection.
