@@ -1,6 +1,7 @@
 :root {
     --bg-color: #fafbfb;
     --text-color: #2c3e50;
+    --color-primary: #134E4A; /* Emerald - Premium & Accessible */
     --accent-color: #27ae60;
     --gold-accent: #d4af37;
     --font-primary: 'Cormorant Garamond', serif;
@@ -28,12 +29,119 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+body.nav-open {
+    overflow: hidden;
+}
+
+/* Navigation System */
+.nav-toggle {
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    z-index: 100;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    transition: transform 0.3s ease;
+}
+
+.nav-toggle:hover {
+    transform: scale(1.1);
+}
+
+.hamburger {
+    fill: var(--text-color);
+    transition: fill 0.3s ease;
+}
+
+/* Dynamic color switch for Nav Header */
+body.nav-open .hamburger {
+    fill: var(--color-primary);
+}
+
+.nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(16px) saturate(200%);
+    z-index: 90;
+    transform: translateX(100%);
+    transition: transform 0.6s var(--transition-ease), visibility 0.6s;
+    visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body.nav-open .nav-overlay {
+    transform: translateX(0);
+    visibility: visible;
+}
+
+.nav-content {
+    text-align: center;
+    max-height: 100vh;
+    overflow-y: auto;
+    padding: 2rem;
+    width: 100%;
+}
+
+.nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-list li {
+    margin: 1.5rem 0;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+body.nav-open .nav-list li {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Staggered delay for menu items */
+body.nav-open .nav-list li:nth-child(1) { transition-delay: 0.1s; }
+body.nav-open .nav-list li:nth-child(2) { transition-delay: 0.15s; }
+body.nav-open .nav-list li:nth-child(3) { transition-delay: 0.2s; }
+body.nav-open .nav-list li:nth-child(4) { transition-delay: 0.25s; }
+body.nav-open .nav-list li:nth-child(5) { transition-delay: 0.3s; }
+body.nav-open .nav-list li:nth-child(6) { transition-delay: 0.35s; }
+body.nav-open .nav-list li:nth-child(7) { transition-delay: 0.4s; }
+body.nav-open .nav-list li:nth-child(8) { transition-delay: 0.45s; }
+body.nav-open .nav-list li:nth-child(9) { transition-delay: 0.5s; }
+body.nav-open .nav-list li:nth-child(10) { transition-delay: 0.55s; }
+body.nav-open .nav-list li:nth-child(11) { transition-delay: 0.6s; }
+
+.nav-list a {
+    font-family: var(--font-primary);
+    font-size: 2rem;
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 300;
+    transition: color 0.3s ease;
+}
+
+.nav-list a:hover {
+    color: var(--color-primary);
+}
+
 .skip-link {
     position: absolute;
     top: 0;
     left: 0;
     background: var(--bg-color);
-    color: var(--text-color);
+    color: var(--color-primary); /* Updated for contrast */
     padding: 1rem;
     z-index: 100;
     transform: translateY(-100%);
@@ -57,6 +165,7 @@ header {
 }
 
 h1 {
+    font-family: var(--font-primary); /* Fix: Use Primary Font */
     font-size: clamp(2.5rem, 6vw, 4.5rem);
     font-weight: 300;
     margin: 0;
@@ -75,10 +184,11 @@ header p {
 }
 
 h2 {
+    font-family: var(--font-primary); /* Fix: Use Primary Font */
     font-size: clamp(1.8rem, 3.5vw, 2.8rem);
     font-weight: 300;
     margin-bottom: var(--spacing-unit);
-    color: #333; /* Improved contrast from #555 */
+    color: #333;
     text-wrap: balance;
     display: flex;
     align-items: baseline;
@@ -122,57 +232,46 @@ section::before {
 
 #hanoi::before {
     background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
-    /* Ochre/Red tones for Colonial/Temples */
 }
 
 #ha-long-bay::before {
     background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
-    /* Emerald tones */
 }
 
 #ninh-binh::before {
     background: linear-gradient(135deg, #117A65 0%, #16A085 100%);
-    /* Deep Forest Green */
 }
 
 #sapa::before {
     background: linear-gradient(135deg, #16a085 0%, #1abc9c 100%);
-    /* Teal/Emerald mix */
 }
 
 #ha-giang::before {
     background: linear-gradient(135deg, #7f8c8d 0%, #95a5a6 100%);
-    /* Slate Grey for Mountains */
 }
 
 #hue::before {
     background: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%);
-    /* Imperial Purple */
 }
 
 #da-nang::before {
     background: linear-gradient(135deg, #2980b9 0%, #3498db 100%);
-    /* Ocean Blue */
 }
 
 #hoi-an::before {
     background: linear-gradient(135deg, #d4af37 0%, #f1c40f 100%);
-    /* Gold tones */
 }
 
 #da-lat::before {
     background: linear-gradient(135deg, #717D7E 0%, #B2BABB 100%);
-    /* Misty Grey/Green */
 }
 
 #ho-chi-minh-city::before {
     background: linear-gradient(135deg, #d35400 0%, #e67e22 100%);
-    /* Energetic Orange */
 }
 
 #phu-quoc::before {
     background: linear-gradient(135deg, #0097a7 0%, #00bcd4 100%);
-    /* Turquoise */
 }
 
 .js section {
@@ -190,14 +289,14 @@ p {
     text-align: justify;
     hyphens: auto;
     line-height: 1.8;
-    color: #444; /* Soften slightly for reading comfort but keep contrast high */
+    color: #444;
 }
 
 footer {
     text-align: center;
     padding: calc(var(--spacing-unit) * 2);
     font-size: 0.9rem;
-    color: var(--accent-color);
+    color: var(--color-primary); /* Fix: Use WCAG compliant color */
     border-top: 1px solid #eee;
     margin-top: calc(var(--spacing-unit) * 3);
 }
