@@ -4,6 +4,7 @@
     --color-primary: #134E4A; /* Emerald - Premium & Accessible */
     --accent-color: #27ae60;
     --gold-accent: #d4af37;
+    --color-gold-text: #8c7324; /* Darker Gold for WCAG AA Contrast */
     --font-primary: 'Cormorant Garamond', serif;
     --font-body: 'Proza Libre', sans-serif;
     --spacing-unit: clamp(1.5rem, 4vw, 3rem);
@@ -13,6 +14,10 @@
 
 * {
     box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
@@ -37,7 +42,7 @@ body {
     height: 100%;
     pointer-events: none;
     z-index: 5;
-    opacity: 0.05;
+    opacity: 0.08;
 }
 
 body.nav-open {
@@ -222,7 +227,7 @@ h2::before {
     content: counter(chapter, decimal-leading-zero) ". ";
     font-family: var(--font-primary);
     font-size: 0.6em;
-    color: var(--gold-accent);
+    color: var(--color-gold-text);
     margin-right: 1rem;
     font-weight: 400;
     opacity: 0.8;
