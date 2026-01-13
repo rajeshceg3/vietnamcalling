@@ -6,33 +6,33 @@
 **Classification:** CLASSIFIED
 
 ## Executive Summary
-A forensic examination of the "Vietnam: A Journey Through Time" web application has been conducted. The application is functional and security hygiene is high (CSP verified). However, several critical accessibility and UX deficiencies have been identified that compromise the "Gold Standard" design aesthetic and legal compliance (WCAG AA).
+A comprehensive, multi-dimensional assessment of the "Vietnam: A Journey Through Time" web application has been executed. While the application maintains a high standard of security hygiene (CSP verified) and basic functionality, critical logic flaws in accessibility handlers and significant deviations from the "Gold Standard" UX specification have been uncovered.
 
 ---
 
 ## 1. Accessibility (Critical)
 **Severity:** **CRITICAL**
-- **Finding:** **Contrast Failure on Chapter Indicators**. The chapter numbers (`h2::before`) utilize the variable `--gold-accent` (#d4af37). Against the `#fafbfb` background, this yields a contrast ratio of ~1.88:1, significantly failing the WCAG AA requirement of 4.5:1 for normal text.
-- **Impact:** Users with visual impairments cannot discern the chapter progression. Legal compliance risk.
-- **Recommendation:** Implement a darker variant of the gold color (e.g., `#947C20`) specifically for text elements to achieve passing contrast while maintaining the visual palette.
+- **Finding:** **Logic Inversion in Focus Management**. The `setInertness` function in `script.js` is called with inverted logic (`!isExpanded` which resolves to `false` when opening). This sets `aria-hidden="false"` on the main content when the menu is **OPEN**, effectively failing to hide the background content from assistive technology.
+- **Impact:** Screen reader users will navigate the page background instead of the menu, violating WCAG 2.1 Focus Order and content hiding standards.
+- **Recommendation:** Correct the function call to `setInertness(true)` when opening the menu and `setInertness(false)` when closing.
 
-## 2. Accessibility & Navigation (High)
+## 2. Architectural & UX (High)
 **Severity:** **HIGH**
-- **Finding:** **Missing Focus Trap in Modal Navigation**. When the navigation menu (`.nav-overlay`) is open, keyboard users can Tab out of the menu and interact with the obscured page content behind it.
-- **Impact:** Critical disorientation for keyboard and screen reader users. Violates WCAG 2.1 Focus Order criteria.
-- **Recommendation:** Implement a JavaScript "Focus Trap" that cycles focus within the menu while open, and apply `aria-hidden="true"` to the main content areas (`main`, `header`, `footer`).
+- **Finding:** **Missing "Magnetic" Interaction**. The specified "Magnetic Button" interaction pattern—where buttons gravitationally pull towards the cursor—is entirely absent from the codebase.
+- **Impact:** Failure to deliver the "Premium/Ethereal" user experience promised in the design mandate.
+- **Recommendation:** Implement the `.magnetic` utility class and associated JavaScript logic to calculate and apply button translations based on mouse proximity.
 
-## 3. User Experience (Medium)
+## 3. Mobile User Experience (Medium)
 **Severity:** **MEDIUM**
-- **Finding:** **Abrupt Scroll Behavior**. Navigation links (`<a href="#section">`) cause an instantaneous jump to the target section. This violates the "soothing, elegant" design directive.
-- **Impact:** Jarring user experience; disrupts the narrative flow.
-- **Recommendation:** Apply `html { scroll-behavior: smooth; }` in CSS to ensure fluid navigation transitions.
+- **Finding:** **Lack of Scroll Containment**. The mobile experience lacks `overscroll-behavior: none` and `min-height: 100dvh` on the Hero section.
+- **Impact:** Users can "pull to refresh" or scroll past boundaries, breaking the immersive app-like feel. The Hero section may not fill the screen on some mobile browsers due to dynamic toolbar resizing.
+- **Recommendation:** Apply `overscroll-behavior: none` to `body` and `min-height: 100dvh` to `header`.
 
-## 4. Visual Integrity (Low)
-**Severity:** **LOW**
-- **Finding:** **Texture Opacity Insufficient**. The noise overlay (`.noise-overlay`) has an opacity of `0.05`. While present, it is virtually imperceptible on standard monitors, failing to deliver the requested "paper feel".
-- **Impact:** Dilution of the intended "Premium" aesthetic.
-- **Recommendation:** Increase opacity to `0.08` or `0.1` to ensure the texture is visible but subtle.
+## 4. Visual Design Integrity (Medium)
+**Severity:** **MEDIUM**
+- **Finding:** **Incorrect Shadow Colorization**. Section shadows (`section::before`) utilize standard black (`rgba(0,0,0,...)`) instead of the required Primary Emerald color (`rgba(19, 78, 74,...)`).
+- **Impact:** Visual dissonance; the shadows feel "dirty" rather than integrated with the color palette.
+- **Recommendation:** Update `box-shadow` values to use the RGB values of `--color-primary`.
 
 ## 5. Security Hygiene (Verified)
 **Severity:** **INFO**
@@ -41,6 +41,7 @@ A forensic examination of the "Vietnam: A Journey Through Time" web application 
 ---
 
 ## Remediation Plan
-1.  **Enhance Accessibility:** Define `--color-gold-text` and apply to chapter numbers.
-2.  **Fortify Navigation:** Implement Focus Trap and ARIA management in `script.js`.
-3.  **Optimize UX:** Enable smooth scrolling and tune texture opacity.
+1.  **Rectify Accessibility Logic:** Fix `script.js` to ensure `aria-hidden` is toggled correctly.
+2.  **Implement Magnetic Interactions:** Add JS and CSS for the magnetic effect.
+3.  **Optimize Mobile UX:** Apply CSS fixes for scroll behavior and viewport height.
+4.  **Polish Visuals:** Update shadow colors to match the Emerald theme.
