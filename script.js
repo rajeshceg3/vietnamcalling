@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
             navOverlay.setAttribute('aria-hidden', isExpanded); // if was expanded (true), now false (hidden). Wait, logic inverse: expanded=false -> hidden=true. Click -> expanded=true -> hidden=false. Correct.
             document.body.classList.toggle('nav-open');
 
+            // Fix: logic was inverted. When opening (!isExpanded was true), we want inertness=true
             setInertness(!isExpanded);
 
             if (!isExpanded) {
@@ -176,4 +177,24 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Magnetic Button Effect
+    const magneticButtons = document.querySelectorAll('.magnetic');
+
+    magneticButtons.forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+
+            // Magnetic pull strength
+            const strength = 0.5;
+
+            btn.style.transform = `translate(${x * strength}px, ${y * strength}px)`;
+        });
+
+        btn.addEventListener('mouseleave', () => {
+            btn.style.transform = 'translate(0, 0)';
+        });
+    });
 });

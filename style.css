@@ -32,6 +32,8 @@ body {
     font-size: clamp(1.15rem, 2.5vw, 1.45rem);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Mobile UX: Prevent pull-to-refresh */
+    overscroll-behavior: none;
 }
 
 .noise-overlay {
@@ -71,8 +73,15 @@ body.nav-open {
 }
 
 .nav-toggle:hover {
-    transform: scale(1.05);
+    /* Remove scale as it might conflict with magnetic */
+    /* transform: scale(1.05); */
     background: rgba(255, 255, 255, 0.8);
+}
+
+.magnetic {
+    transition: transform 0.1s linear;
+    will-change: transform;
+    /* Ensure it doesn't display inline if it breaks layout, but utility usually leaves display alone */
 }
 
 .hamburger {
@@ -182,6 +191,11 @@ body.nav-open .nav-list li:nth-child(11) { transition-delay: 0.6s; }
 }
 
 header {
+    /* Mobile UX: Ensure full viewport height */
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     padding: calc(var(--spacing-unit) * 6) var(--spacing-unit);
     text-align: center;
     opacity: 0;
@@ -248,7 +262,8 @@ section::before {
     height: 350px;
     border-radius: 4px;
     margin-bottom: calc(var(--spacing-unit) * 1.5);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.01);
+    /* Fix: Use Primary Color for Shadows */
+    box-shadow: 0 20px 25px -5px rgba(19, 78, 74, 0.1), 0 10px 10px -5px rgba(19, 78, 74, 0.05);
     transform: translate3d(var(--mouse-x), var(--mouse-y), 0);
     transition: transform 0.1s ease-out;
     will-change: transform;
